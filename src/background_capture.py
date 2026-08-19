@@ -1,6 +1,7 @@
 import cv2
 import time
 
+
 def capture_background(cap, warmup_seconds=2, discard_frames=30):
     """
     Captures a static background frame.
