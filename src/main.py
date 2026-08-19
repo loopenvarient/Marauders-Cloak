@@ -1,19 +1,30 @@
 import cv2
 
-cap = cv2.VideoCapture(0)
+def main():
+    cap = cv2.VideoCapture(0)
 
-if not cap.isOpened():
-    print("Error: could not open webcam")
-else:
-    print("Webcam opened successfully")
+    if not cap.isOpened():
+        print("Error: could not open webcam")
+        return
 
-while cap.isOpened():
-    ret, frame = cap.read()
-    if not ret:
-        break
-    cv2.imshow('Webcam Test', frame)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+    print("Webcam opened successfully. Press 'q' to quit.")
 
-cap.release()
-cv2.destroyAllWindows()
+    while cap.isOpened():
+        ret, frame = cap.read()
+        if not ret:
+            print("Error: failed to grab frame")
+            break
+
+        # Mirror-flip for natural selfie-view
+        frame = cv2.flip(frame, 1)
+
+        cv2.imshow('Marauders Cloak', frame)
+
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+    cap.release()
+    cv2.destroyAllWindows()
+
+if __name__ == "__main__":
+    main()
