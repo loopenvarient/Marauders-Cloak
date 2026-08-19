@@ -76,11 +76,9 @@ This project is helping me understand the fundamentals of:
 ## 📁 Project Structure
 
 ```text
-Harry-Potter-Invisibility-Cloak/
-│
-├── main.py
+Marauders-Cloak/
+├── src/
+│   └── main.py
 ├── requirements.txt
 ├── README.md
-│
-└── assets/
-    └── demo.gif
+└── .gitignore
