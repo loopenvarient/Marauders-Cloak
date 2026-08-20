@@ -44,7 +44,7 @@ def main():
 
         frame = cv2.flip(frame, 1)
 
-        # For now just show live frame + background side by side to confirm capture worked
+        # Show live frame + background side by side to confirm capture worked
         combined = cv2.hconcat([frame, background])
         cv2.imshow('Live (left) vs Background (right)', combined)
 
@@ -52,10 +52,13 @@ def main():
         if key == ord('q'):
             break
         elif key == ord('b'):
-            background = capture_background(cap)
+            new_bg = capture_background(cap)
+            if new_bg is not None:
+                background = new_bg
 
     cap.release()
     cv2.destroyAllWindows()
+
 
 if __name__ == "__main__":
     main()
