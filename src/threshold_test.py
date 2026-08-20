@@ -1,11 +1,7 @@
 import cv2
-import numpy as np
 
-# Bounds derived from color sampling (Step 4)
-lower_bound = np.array([113, 35, 30])
-upper_bound = np.array([141, 180, 200])
+from config import LOWER_BOUND, UPPER_BOUND, KERNEL
 
-kernel = np.ones((5, 5), np.uint8)
 
 def main():
     cap = cv2.VideoCapture(0)
@@ -22,13 +18,16 @@ def main():
             break
 
         frame = cv2.flip(frame, 1)
-        hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-        raw_mask = cv2.inRange(hsv_frame, lower_bound, upper_bound)
+        # Blur before masking to match main.py behaviour
+        blurred = cv2.GaussianBlur(frame, (7, 7), 0)
+        hsv_frame = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
+
+        raw_mask = cv2.inRange(hsv_frame, LOWER_BOUND, UPPER_BOUND)
 
         # Morphological cleanup
-        cleaned_mask = cv2.morphologyEx(raw_mask, cv2.MORPH_OPEN, kernel, iterations=2)
-        cleaned_mask = cv2.morphologyEx(cleaned_mask, cv2.MORPH_CLOSE, kernel, iterations=2)
+        cleaned_mask = cv2.morphologyEx(raw_mask, cv2.MORPH_OPEN, KERNEL, iterations=2)
+        cleaned_mask = cv2.morphologyEx(cleaned_mask, cv2.MORPH_CLOSE, KERNEL, iterations=2)
 
         cloak_only = cv2.bitwise_and(frame, frame, mask=cleaned_mask)
 
@@ -42,6 +41,7 @@ def main():
 
     cap.release()
     cv2.destroyAllWindows()
+
 
 if __name__ == "__main__":
     main()
